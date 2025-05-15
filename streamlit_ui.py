@@ -26,14 +26,21 @@ if user_input:
         st.markdown(user_input)
 
     with st.chat_message("ai"):
-        response_container = st.empty()
+        #response_container = st.empty()
+        tool_log = st.expander("Tool Activity", expanded=False)
+        answer_container = st.empty()
+        
 
         # Stream response using astream_events
         async def stream_response():
             full_response = ""
             async for event in agent.stream_bot_response(user_input, st.session_state.history[:-1]):
-                full_response += event
-                response_container.markdown(full_response)
+                if 'Tool Called:' in event:
+                    with tool_log:
+                        st.markdown(event)
+                else:
+                    full_response += event
+                    answer_container.markdown(full_response)
             return full_response
 
         # Run async code inside Streamlit

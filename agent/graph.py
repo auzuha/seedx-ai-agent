@@ -101,7 +101,7 @@ class Agent:
 
         
 
-OPENAI_API_KEY=1
+OPENAI_API_KEY=""
 llm = ChatOpenAI(api_key=OPENAI_API_KEY)
 tools = [analytics_agent,project_agent]
 a = Agent(llm=llm, tools=tools)
