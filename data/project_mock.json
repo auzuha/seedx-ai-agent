@@ -1,6 +1,6 @@
 [
     {
-        "project_name": "Website Redesign Campaign",
+        "project_name": "Website Redesign",
         "tasks": [
             {"task": "Landing Page Design", "status": "Completed", "due_date": "2024-04-05"},
             {"task": "SEO Optimization", "status": "In Progress", "due_date": "2024-04-15"},
