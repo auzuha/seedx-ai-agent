@@ -4,6 +4,6 @@ from utils.mock_apis import get_campaign_analytics
 @tool
 def budget_agent(campaign_name: str) -> str:
     """
-    When given a campaign name, Analyze the metrics, draw conclusions and suggest where to invest in the next phase/ which ad space is most profitable.
+    Calculate key campaign metrics—CTR, conversion rate, cost per click (CPC), cost per acquisition (CPA), total spend, and ROI—for each advertising channel within the campaign. Present these metrics clearly to the user, compare performance across ad spaces, identify the most cost-effective and profitable channel, and recommend where to prioritize budget allocation for the next campaign phase.
     """
     return get_campaign_analytics(campaign_name)
