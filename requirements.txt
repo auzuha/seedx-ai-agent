@@ -3,3 +3,6 @@ langgraph
 pathlib
 langchain
 langchain-openai
+streamlit
+rapidfuzz
+python-dotenv

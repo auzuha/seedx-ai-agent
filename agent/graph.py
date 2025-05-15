@@ -2,7 +2,7 @@ from langgraph.graph import START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
 from langchain_openai import ChatOpenAI
 
@@ -14,6 +14,9 @@ from agent.tools.project_agent import project_agent
 from utils.logging import log_msg_to_file
 
 import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
@@ -88,10 +91,13 @@ class Agent:
                 if hasattr(msg_chunk, 'tool_call_id'):
                     tool_call_msg = f"Tool Called: {msg_chunk.name}, Results Returned: {msg_chunk.content}\n"
                     LOG['tool_calls'].append(tool_call_msg)
-                    yield tool_call_msg
+                    event = {'event': 'tool_call', 'content': tool_call_msg}
+                    #yield tool_call_msg
                 else:
                     final_answer += msg_chunk.content
-                    yield msg_chunk.content
+                    event = {'event':'message', 'content': msg_chunk.content}
+                    #yield msg_chunk.content
+                yield event
 
         LOG['final_answer'] = final_answer
 
@@ -99,25 +105,9 @@ class Agent:
 
     
 
-        
 
-OPENAI_API_KEY=""
-llm = ChatOpenAI(api_key=OPENAI_API_KEY)
-tools = [analytics_agent,project_agent]
-a = Agent(llm=llm, tools=tools)
-def test():
-    OPENAI_API_KEY="keyhere"
-
-
-
+def get_agent():
     llm = ChatOpenAI()
-    a = Agent(llm, None)
-    msg = {
-        'messages': []
-    }
-    x = input()
-    while x != 'q':
-        msg["messages"].append(HumanMessage(content=x))
-        msg = a.graph.invoke(msg)
-        print(msg)
-        x = input()
+    tools = [analytics_agent,project_agent]
+    a = Agent(llm=llm, tools=tools)
+    return a

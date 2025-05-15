@@ -2,13 +2,13 @@ from fastapi import FastAPI
 
 from fastapi.responses import StreamingResponse
 
-from agent.graph import a as agent
+from agent.graph import get_agent
 
 
 from models.models import QueryRequest
 
 app = FastAPI()
-
+agent = get_agent()
 
 
 @app.post('/query')

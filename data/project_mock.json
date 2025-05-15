@@ -1,0 +1,18 @@
+[
+    {
+        "project_name": "Website Redesign Campaign",
+        "tasks": [
+            {"task": "Landing Page Design", "status": "Completed", "due_date": "2024-04-05"},
+            {"task": "SEO Optimization", "status": "In Progress", "due_date": "2024-04-15"},
+            {"task": "Mobile Testing", "status": "Pending", "due_date": "2024-04-20"}
+        ]
+    },
+    {
+        "project_name": "Influencer Partnership Drive",
+        "tasks": [
+            {"task": "Shortlist Influencers", "status": "Completed", "due_date": "2024-03-25"},
+            {"task": "Contract Signing", "status": "In Progress", "due_date": "2024-03-30"},
+            {"task": "Content Shoot", "status": "Pending", "due_date": "2024-04-05"}
+        ]
+    }
+]

@@ -1,8 +1,9 @@
 import streamlit as st
-from agent.graph import a as agent
+from agent.graph import get_agent
 from langchain_openai import ChatOpenAI
 import asyncio
 
+agent = get_agent()
 
 st.title("Chat with AI")
 
@@ -35,11 +36,11 @@ if user_input:
         async def stream_response():
             full_response = ""
             async for event in agent.stream_bot_response(user_input, st.session_state.history[:-1]):
-                if 'Tool Called:' in event:
+                if event['event'] == 'tool_call':
                     with tool_log:
-                        st.markdown(event)
+                        st.markdown(event['content'])
                 else:
-                    full_response += event
+                    full_response += event['content']
                     answer_container.markdown(full_response)
             return full_response
 
