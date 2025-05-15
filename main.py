@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from fastapi.responses import StreamingResponse
 
-from utils.graph import a as agent
+from agent.graph import a as agent
 
 
 from models.models import QueryRequest
@@ -23,5 +23,3 @@ async def stream(q: QueryRequest):
         return StreamingResponse(agent.stream_bot_response(q.query, q.history))
     except:
         pass
-    finally:
-        print('LOGGING LOGIC')

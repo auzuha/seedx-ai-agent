@@ -1,21 +1,22 @@
-from typing import Annotated, TypedDict
-
-
+from langgraph.graph import START, StateGraph
 from langgraph.graph.message import add_messages
-from langgraph.graph import START, END, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
-from langchain_core.messages import HumanMessage, AIMessage
+
+from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
 from langchain_openai import ChatOpenAI
 
-from tools.tools import analytics_agent, project_agent
+from typing import Annotated, TypedDict
+
+from agent.tools.analytics_agent import analytics_agent
+from agent.tools.project_agent import project_agent
+
+from utils.logging import log_msg_to_file
 
 import datetime
-import os
-import json
+
 class State(TypedDict):
     messages: Annotated[list, add_messages]
-
 
 class Agent:
     _instance = None  # Class-level attribute to store singleton instance
@@ -26,7 +27,6 @@ class Agent:
         return cls._instance
 
     def __init__(self, llm, tools):
-        # Optional: prevent reinitialization
         if hasattr(self, "_initialized") and self._initialized:
             return
         self._initialized = True
@@ -50,10 +50,13 @@ class Agent:
         graph_builder.add_edge(START, "chatbot")
         graph = graph_builder.compile()
         return graph
+
     def chatbot(self, state: State):
         return {"messages": [self.llm_with_tools.invoke(state["messages"])]}        
 
     def get_bot_response(self, message, history):
+        LOG = {'user_msg': message, 'timestamp': str(datetime.datetime.now(datetime.timezone.utc)), 'tool_calls': []}
+        
         messages = []
         if history:
             for human_msg, ai_msg in history:
@@ -61,12 +64,18 @@ class Agent:
                 messages.append(AIMessage(ai_msg))
         messages.append(HumanMessage(message))
         response = self.graph.invoke({'messages': messages})
+        
+        LOG['final_answer'] = response['messages'][-1].content
+
+        log_msg_to_file(LOG)
 
         return response['messages'][-1].content
     
     async def stream_bot_response(self, message: str, history: list[tuple[str, str]]):
         LOG = {'user_msg': message, 'timestamp': str(datetime.datetime.now(datetime.timezone.utc)), 'tool_calls': []}
+
         final_answer = ""
+
         messages = []
         if history:
             for human_msg, ai_msg in history:
@@ -83,25 +92,16 @@ class Agent:
                 else:
                     final_answer += msg_chunk.content
                     yield msg_chunk.content
-        LOG['final_answer'] = final_answer
-        self.log_msg_to_file(LOG)
 
-    def log_msg_to_file(self, log):
-        today = str(datetime.date.today())
-        fpath = f'./logs/{today}.json'
-        if not os.path.exists(fpath):
-            with open(fpath, 'w') as f:
-                json.dump([log], f, indent=2)
-        else:
-            with open(fpath, 'r') as f:
-                logs = json.load(f)
-            logs.append(log)
-            with open(fpath, 'w') as f:
-                json.dump(logs, f, indent=2)
+        LOG['final_answer'] = final_answer
+
+        log_msg_to_file(LOG)
+
+    
 
         
 
-OPENAI_API_KEY='keyhere'
+OPENAI_API_KEY=1
 llm = ChatOpenAI(api_key=OPENAI_API_KEY)
 tools = [analytics_agent,project_agent]
 a = Agent(llm=llm, tools=tools)
