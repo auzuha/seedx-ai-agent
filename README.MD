@@ -1,23 +1,12 @@
-## Structure
+# SeedX AI Agents
 
+## This project is a prototype implementation of a Multi-Agent AI System designed for a marketing company. The system demonstrates how multiple specialized AI agents can collaborate via an API to assist with marketing-related tasks through conversational and data-driven workflows.
 
-<pre>
-MAIN DIR
-    main.py - fastapi app
-    /tools
-        tools.py - ai tools (functions)
-    /utils
-        utils.py - anon utils
-        graph.py - main langgraph setup
-        logger.py - for logging conversation
-</pre>
+## The focus is on building an extensible architecture where agents interact and share information, showcasing:
 
-## Log Structure
-<pre>
-{
-    'user_msg': str,
-    'timestamp': str,
-    'tool_calls': List[str],
-    'final_answer': str
-}
-</pre>
+- Modular and clear agent roles
+
+- Traceable multi-agent conversations
+
+- Data-driven responses based on mocked datasets
+

@@ -108,7 +108,7 @@ class Agent:
 
 
 def get_agent():
-    llm = ChatOpenAI()
+    llm = ChatOpenAI(model='gpt-4o')
     tools = [analytics_agent,project_agent,budget_agent]
     a = Agent(llm=llm, tools=tools)
     return a

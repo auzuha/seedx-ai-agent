@@ -1,14 +1,11 @@
 from langchain_core.tools import tool
 from utils.mock_apis import get_campaign_analytics
+from prompt_config import PROMPTS
 
-
-@tool
-def analytics_agent(campaign_name: str) -> str:
+@tool(name_or_callable='AnalyticsAgent', description=PROMPTS['v1']['AnalyticsAgent'])
+def analytics_agent():
     """
-    Provides marketing analytics based on recent campaign data. 
-    Accepts a campaign name or query and returns KPIs such as click-through rate (CTR),
-    conversion rate, cost per conversion, and ROI. Useful for analyzing campaign performance 
-    or generating summaries of multiple campaigns.
+    Provides marketing analytics based for recent campaigns.
     """
-    data = get_campaign_analytics(campaign_name)
-    return data
+    return get_campaign_analytics()
+    
