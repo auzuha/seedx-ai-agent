@@ -11,6 +11,7 @@ from typing import Annotated, TypedDict
 from agent.tools.analytics_agent import analytics_agent
 from agent.tools.project_agent import project_agent
 from agent.tools.budget_agent import budget_agent
+from config import MODEL
 
 from utils.logging import log_msg_to_file
 
@@ -108,7 +109,7 @@ class Agent:
 
 
 def get_agent():
-    llm = ChatOpenAI(model='gpt-4o')
+    llm = ChatOpenAI(model=MODEL)
     tools = [analytics_agent,project_agent,budget_agent]
     a = Agent(llm=llm, tools=tools)
     return a

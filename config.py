@@ -20,3 +20,6 @@ PROMPTS = {
         }
 
 }
+
+
+MODEL = 'gpt-4o'

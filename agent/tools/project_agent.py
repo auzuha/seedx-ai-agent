@@ -1,6 +1,6 @@
 from langchain_core.tools import tool
 from utils.mock_apis import get_projects
-from prompt_config import PROMPTS
+from config import PROMPTS
 
 @tool(name_or_callable="ProjectAgent", description=PROMPTS['v1']['ProjectAgent'])
 def project_agent():
